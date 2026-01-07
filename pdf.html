@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Images to PDF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body{background:#020617;color:white;font-family:Arial;text-align:center}
+.card{background:#1e293b;margin:20px;padding:20px;border-radius:15px}
+button{padding:10px 20px;border:none;border-radius:20px;background:#38bdf8;font-size:16px}
+</style>
+</head>
+<body>
+
+<h2>Images → PDF</h2>
+
+<div class="card">
+<input type="file" id="imgs" accept="image/*" multiple><br><br>
+<button onclick="makePDF()">Create PDF</button>
+</div>
+
+<script>
+async function makePDF(){
+const { jsPDF } = window.jspdf;
+let pdf = new jsPDF();
+let files = document.getElementById("imgs").files;
+
+for(let i=0;i<files.length;i++){
+ let img = await read(files[i]);
+ if(i>0) pdf.addPage();
+ pdf.addImage(img,"JPEG",10,10,180,250);
+}
+pdf.save("images.pdf");
+}
+
+function read(file){
+return new Promise(r=>{
+ let fr=new FileReader();
+ fr.onload=e=>r(e.target.result);
+ fr.readAsDataURL(file);
+});
+}
+</script>
+
+</body>
+</html>
