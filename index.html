@@ -1,82 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Easy Converter</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Easy Converter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: white;
-      text-align: center;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#1f2937,#111827);
+  color: white;
+}
 
-    header {
-      padding: 30px;
-    }
+.container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #1f2937;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.4);
+  text-align: center;
+}
 
-    .card {
-      background: rgba(255,255,255,0.1);
-      margin: 20px;
-      padding: 20px;
-      border-radius: 15px;
-    }
+button {
+  background: #6ee7b7;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 15px;
+}
 
-    input[type="file"] {
-      margin-top: 15px;
-      color: white;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 30px;
-      font-size: 16px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      background: #00ffcc;
-      color: black;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 30px;
-      font-size: 14px;
-      opacity: 0.8;
-    }
-  </style>
+select,input {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Easy Converter App</h1>
-    <p>Convert images & files easily</p>
-  </header>
+<div class="container">
+  <h2>Image Converter</h2>
 
-  <div class="card">
-    <h2>Image Converter</h2>
-    <input type="file" accept="image/*">
-    <br>
-    <button>Convert</button>
-    <p style="font-size:12px;">(Demo UI)</p>
-  </div>
+  <input type="file" id="imageInput" accept="image/*"><br>
 
-  <div class="card">
-    <h2>File Converter</h2>
-    <input type="file">
-    <br>
-    <button>Convert</button>
-    <p style="font-size:12px;">(Demo UI)</p>
-  </div>
+  <select id="format">
+    <option value="image/png">PNG</option>
+    <option value="image/jpeg">JPG</option>
+    <option value="image/webp">WEBP</option>
+  </select><br>
 
-  <footer>
-    <p>© 2026 Easy Converter</p>
-    <p>Privacy Policy | About Us</p>
-  </footer>
+  <button onclick="convertImage()">Convert & Download</button>
+</div>
+
+<script>
+function convertImage() {
+  const fileInput = document.getElementById('imageInput');
+  const format = document.getElementById('format').value;
+
+  if (!fileInput.files.length) {
+    alert("Select an image first!");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(function(blob) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "converted-image";
+        link.click();
+      }, format);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+</script>
 
 </body>
 </html>
