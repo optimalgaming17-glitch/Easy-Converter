@@ -1,103 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Easy Converter</title>
 
-<title>Easy Converter</title>
+  <link rel="manifest" href="manifest.json">
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#34f5c5">
-
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#0f172a,#020617);
-  font-family:Arial,sans-serif;
-  color:white;
-}
-
-.container{
-  text-align:center;
-}
-
-h1{
-  font-size:36px;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  opacity:0.8;
-  margin-bottom:30px;
-}
-
-.btn{
-  display:block;
-  margin:15px auto;
-  padding:15px 30px;
-  background:#34f5c5;
-  color:#000;
-  text-decoration:none;
-  border-radius:12px;
-  font-size:18px;
-  font-weight:bold;
-  width:220px;
-}
-
-/* LOADER */
-#loader{
-  position:fixed;
-  inset:0;
-  background:#020617;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-}
-
-.spinner{
-  width:45px;
-  height:45px;
-  border:5px solid #34f5c5;
-  border-top-color:transparent;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg);}
-}
-</style>
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(180deg,#020617,#020024);
+      font-family:Arial,sans-serif;
+      color:#fff;
+      text-align:center;
+    }
+    .btn{
+      display:block;
+      margin:15px auto;
+      padding:15px 30px;
+      background:#7cf3c4;
+      color:#000;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:bold;
+      width:220px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="loader">
-  <div class="spinner"></div>
-</div>
+  <div>
+    <h1>Easy Converter</h1>
+    <p>Image ⇄ PDF Converter</p>
 
-<div class="container">
-  <h1>Easy Converter</h1>
-  <div class="subtitle">Convert Images ⇄ PDF</div>
+    <a class="btn" href="image.html">Image to PDF</a>
+    <a class="btn" href="pdf.html">PDF to Image</a>
+  </div>
 
-  <a href="image.html" class="btn">JPG / PNG → PDF</a>
-  <a href="pdf.html" class="btn">PDF → Image</a>
-</div>
-
-<script>
-window.addEventListener("load",()=>{
-  document.getElementById("loader").style.display="none";
-});
-
-// SERVICE WORKER
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js");
-}
-</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 
 </body>
 </html>
