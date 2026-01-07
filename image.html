@@ -1,54 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Image Tools</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image to PDF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{background:#0f172a;color:white;font-family:Arial;text-align:center}
-.card{background:#1e293b;margin:20px;padding:20px;border-radius:15px}
-button{padding:10px 20px;border:none;border-radius:20px;background:#34f5c5;font-size:16px}
-select,input{margin:10px}
+body{
+  background:#020617;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  padding:20px;
+}
+input,button{
+  margin:15px 0;
+}
+button{
+  padding:12px 25px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  background:#34f5c5;
+}
 </style>
 </head>
+
 <body>
+<h2>JPG / PNG / WEBP → PDF</h2>
 
-<h2>Image Converter</h2>
+<input type="file" accept="image/png,image/jpeg,image/webp" multiple>
+<br>
+<button>Convert (Demo)</button>
 
-<div class="card">
-<input type="file" id="img"><br>
-<select id="type">
-<option value="image/png">PNG</option>
-<option value="image/jpeg">JPG</option>
-<option value="image/webp">WEBP</option>
-</select><br>
-<button onclick="convert()">Convert</button>
-</div>
-
-<script>
-function convert(){
-let file=document.getElementById("img").files[0];
-let type=document.getElementById("type").value;
-
-let reader=new FileReader();
-reader.onload=e=>{
- let img=new Image();
- img.onload=()=>{
-  let c=document.createElement("canvas");
-  c.width=img.width;
-  c.height=img.height;
-  c.getContext("2d").drawImage(img,0,0);
-  c.toBlob(blob=>{
-   let a=document.createElement("a");
-   a.href=URL.createObjectURL(blob);
-   a.download="converted."+type.split("/")[1];
-   a.click();
-  },type);
- }
- img.src=e.target.result;
-}
-reader.readAsDataURL(file);
-}
-</script>
-
+<p style="opacity:.6">Conversion logic next step</p>
 </body>
 </html>
