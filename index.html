@@ -6,8 +6,10 @@
 
   <title>Easy Converter</title>
 
-  <!-- PWA -->
+  <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- Theme color -->
   <meta name="theme-color" content="#34f5c5">
 
   <style>
@@ -16,50 +18,24 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0f172a, #020617);
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      display: none;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.08);
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    h2 {
-      margin-bottom: 15px;
-    }
-
-    input[type="file"] {
-      margin-bottom: 15px;
-    }
-
-    button {
-      background: #34f5c5;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-size: 16px;
-      cursor: pointer;
     }
 
     /* LOADER */
     #loader {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #34f5c5;
-      border-top-color: transparent;
+      position: fixed;
+      inset: 0;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #1e293b;
+      border-top: 6px solid #34f5c5;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -67,45 +43,55 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* MAIN CONTENT */
+    .container {
+      padding: 30px;
+      text-align: center;
+    }
+
+    a {
+      display: inline-block;
+      margin: 15px;
+      padding: 15px 25px;
+      background: #34f5c5;
+      color: black;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- LOADER -->
-  <div id="loader"></div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="spinner"></div>
+</div>
 
-  <!-- MAIN UI -->
-  <div class="container" id="app">
-    <div class="card">
-      <h2>Image Converter</h2>
-      <input type="file">
-      <br>
-      <button>Convert</button>
-      <p>(Demo UI)</p>
-    </div>
+<!-- CONTENT -->
+<div class="container">
+  <h1>Easy Converter</h1>
+  <p>Image ⇄ PDF Converter</p>
 
-    <div class="card">
-      <h2>PDF Converter</h2>
-      <input type="file">
-      <br>
-      <button>Convert</button>
-      <p>(Demo UI)</p>
-    </div>
-  </div>
+  <a href="image.html">Image to PDF</a>
+  <a href="pdf.html">PDF to Image</a>
+</div>
 
-  <script>
-    // Loader control
-    window.addEventListener("load", () => {
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("app").style.display = "block";
-    });
+<script>
+  /* REMOVE LOADER */
+  window.addEventListener("load", () => {
+    document.getElementById("loader").style.display = "none";
+  });
 
-    // Service Worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
+  /* SERVICE WORKER REGISTER */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch(err => console.log("SW error", err));
+  }
+</script>
 
 </body>
 </html>
