@@ -2,50 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PDF to Image</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to Image</title>
 
 <style>
 body{
   margin:0;
-  min-height:100vh;
+  height:100vh;
+  background:linear-gradient(180deg,#020617,#020024);
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(135deg,#050b1e,#020617);
-  font-family:Arial,Helvetica,sans-serif;
   color:#fff;
+  font-family:Arial;
 }
-.container{text-align:center}
-h1{margin-bottom:20px}
-input{margin:15px 0}
+.box{text-align:center}
+input{margin:15px}
 button{
-  background:#7cf2c2;
+  padding:14px 28px;
+  background:#7cf3c4;
   border:none;
-  padding:14px 40px;
-  font-size:18px;
   border-radius:12px;
-  cursor:pointer;
-}
-.note{
-  margin-top:15px;
-  font-size:14px;
-  opacity:.7;
+  font-size:16px;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="box">
   <h1>PDF → Image</h1>
 
   <input type="file" accept="application/pdf">
 
-  <br>
-
+  <br><br>
   <button>Convert</button>
-
-  <div class="note">Conversion logic coming soon</div>
 </div>
 </body>
 </html>
