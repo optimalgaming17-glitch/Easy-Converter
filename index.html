@@ -1,52 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Easy Converter</title>
+<meta charset="UTF-8">
+<title>Easy Converter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="manifest" href="manifest.json">
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <style>
-    body{
-      margin:0;
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(180deg,#020617,#020024);
-      font-family:Arial,sans-serif;
-      color:#fff;
-      text-align:center;
-    }
-    .btn{
-      display:block;
-      margin:15px auto;
-      padding:15px 30px;
-      background:#7cf3c4;
-      color:#000;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:bold;
-      width:220px;
-    }
-  </style>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6fb;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+.loader {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
 
-  <div>
-    <h1>Easy Converter</h1>
-    <p>Image ⇄ PDF Converter</p>
+<div class="container">
+<h1>Easy Converter</h1>
 
-    <a class="btn" href="image.html">Image to PDF</a>
-    <a class="btn" href="pdf.html">PDF to Image</a>
-  </div>
+<!-- IMAGE TO IMAGE -->
+<div class="section">
+<h2>Image to Image</h2>
+<input type="file" id="imgInput" accept="image/*">
+<select id="imgFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+  <option value="image/webp">WEBP</option>
+</select>
+<button onclick="convertImage()">Convert</button>
+</div>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+<!-- PDF TO IMAGES -->
+<div class="section">
+<h2>PDF to Images</h2>
+<input type="file" accept="application/pdf">
+<p style="font-size:14px;">(Preview supported – download depends on browser)</p>
+</div>
+
+<!-- IMAGES TO PDF -->
+<div class="section">
+<h2>Images to PDF</h2>
+<input type="file" id="imgToPdfInput" accept="image/*" multiple>
+<button onclick="imagesToPDF()">Create PDF</button>
+<div class="loader" id="pdfLoader">Creating PDF...</div>
+</div>
+
+</div>
+
+<script>
+/* IMAGE TO IMAGE */
+function convertImage() {
+  const file = document.getElementById("imgInput").files[0];
+  const format = document.getElementById("imgFormat").value;
+  if (!file) return alert("Select image");
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.getContext("2d").drawImage(img, 0, 0);
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL(format);
+      link.download = "converted";
+      link.click();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* IMAGES TO PDF */
+async function imagesToPDF() {
+  const files = document.getElementById("imgToPdfInput").files;
+  const loader = document.getElementById("pdfLoader");
+
+  if (files.length === 0) {
+    alert("Select images");
+    return;
+  }
+
+  loader.style.display = "block";
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+
+  for (let i = 0; i < files.length; i++) {
+    const imgData = await readImg(files[i]);
+    const props = pdf.getImageProperties(imgData);
+    const w = pdf.internal.pageSize.getWidth();
+    const h = (props.height * w) / props.width;
+
+    if (i !== 0) pdf.addPage();
+    pdf.addImage(imgData, "JPEG", 0, 0, w, h);
+  }
+
+  pdf.save("images-to-pdf.pdf");
+  loader.style.display = "none";
+}
+
+function readImg(file) {
+  return new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(file);
+  });
+}
+</script>
 
 </body>
 </html>
